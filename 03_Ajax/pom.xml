@@ -7,13 +7,15 @@
 	<name>03_Ajax</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
+	
 	<properties>
       <java-version>11</java-version>
       <org.springframework-version>5.3.3</org.springframework-version>
       <org.aspectj-version>1.9.6</org.aspectj-version>
       <org.slf4j-version>1.7.30</org.slf4j-version>
    </properties>
-      <dependencies>
+   
+   <dependencies>
       <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 	  <dependency>
 		   <groupId>com.fasterxml.jackson.core</groupId>
@@ -102,7 +104,7 @@
             </exclusion>
          </exclusions>
          <scope>runtime</scope>
-      </dependency>
+     </dependency>
 
       <!-- @Inject -->
       <dependency>
@@ -126,6 +128,7 @@
           <version>2.3.3</version>
           <scope>provided</scope>
       </dependency>
+      
       <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>jstl</artifactId>
