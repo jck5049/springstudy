@@ -33,4 +33,19 @@ public class ProductController {
 		
 	}
 	
+	
+	@GetMapping("/detail.do")
+	public String detail(@RequestParam(value="prodNo", required=false, defaultValue="0") int prodNo, Model model) {
+		productService.loadProduct(prodNo, model);
+		return "product/detail";
+	}
+	
+	
+	@PostMapping("/edit.do")
+	public String edit(ProductDTO product) { // ProductDTO 객체로 값을 전달 받았기 때문에 자동으로 jsp로 forward된다!
+		return "product/edit";				 // jsp로 전달된 값은 객체이름으로 값을 꺼낼 수 있다!(첫글자는 소문자로 변환된다.)
+	}
+	
+	
+	
 }

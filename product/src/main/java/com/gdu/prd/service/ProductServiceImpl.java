@@ -26,5 +26,13 @@ public class ProductServiceImpl implements ProductService {
 		return addResult;
 	}
 	
+	
+	@Override
+	public void loadProduct(int prodNo, Model model) {
+		ProductDTO productDTO = productMapper.getProductByNo(prodNo);
+		model.addAttribute("productDTO", productDTO);
+	}
+	
+	
 
 }

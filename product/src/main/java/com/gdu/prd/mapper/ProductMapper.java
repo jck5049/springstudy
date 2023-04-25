@@ -11,5 +11,6 @@ public interface ProductMapper {
 	public List<ProductDTO> getProductList();
 	public int getProductCount();
 	public int addProduct(ProductDTO productDTO);
+	public ProductDTO getProductByNo(int prodNo);
 
 }
