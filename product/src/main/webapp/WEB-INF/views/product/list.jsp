@@ -19,7 +19,24 @@
 			alert('삽입 실패!');
 		}
 	}
+	
+	$(function(){
+		$('.product').on('click', function(){
+			location.href = '${contextPath}/product/detail.do?prodNo=' + $(this).find('span').text();  // 클릭한 product을 의미(예를들어 4개의 product가 있어도 클릭한 특정 1개의 product를 의미함.)                        
+		})										 													   // find() : 하위태그를 호출할 수 있는 코드!
+	})
+	
 </script>
+<style>
+	.product {
+		width: 200px;
+		border: 1px solid gray;
+	}
+	.product:hover {
+		cursor: pointer;
+		background-color: silver;
+	}
+</style>
 </head>
 <body>
 
@@ -46,8 +63,8 @@
 	
 	<div>
 		<c:forEach items="${productList}" var="product">
-			<ul>
-				<li>제품번호 ${product.prodNo}</li>
+			<ul class="product">
+				<li>제품번호 <span>${product.prodNo}</span></li>
 				<li>제품이름 ${product.prodName}</li>
 			</ul>
 			<hr>
