@@ -31,8 +31,8 @@
 	
 	
 	
-	<!-- Application Loggers : com.gdu.app09 패키지는 debug 수준의 로그 레벨을 가진다. -->
-	<logger name="com.gdu.app09">
+	<!-- Application Loggers : com.gdu.prd 패키지는 debug 수준의 로그 레벨을 가진다. -->
+	<logger name="com.gdu.prd">
 		<level value="debug" />
 	</logger>
 	

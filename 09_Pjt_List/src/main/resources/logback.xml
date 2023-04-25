@@ -31,7 +31,7 @@
 	
 	
 	
-	<!-- Application Loggers : com.gdu.app08 패키지는 debug 수준의 로그 레벨을 가진다. -->
+	<!-- Application Loggers : com.gdu.app09 패키지는 debug 수준의 로그 레벨을 가진다. -->
 	<logger name="com.gdu.app09">
 		<level value="debug" />
 	</logger>

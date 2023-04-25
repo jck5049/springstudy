@@ -13,8 +13,9 @@
 </head>
 <body>
 
+	
 	<div>
-		<a href="${contextPath}/employees/pagination.do">페이징</a>
+		<a href="${contextPath}/product/list.do">제품목록보기</a>
 	</div>
 	
 	
