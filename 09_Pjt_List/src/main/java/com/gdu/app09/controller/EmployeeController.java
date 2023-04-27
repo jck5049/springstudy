@@ -40,9 +40,23 @@ public class EmployeeController {
 	}
 	
 	@ResponseBody	// 이코드로 인해 jsp로 이동이 아니라 a.jax로 이동하게 해주는 코드이다.
-	@GetMapping(value="/employee/scroll.do", produces="application/json")
+	@GetMapping(value="/employees/scroll.do", produces="application/json")
 	public Map<String, Object> scroll(HttpServletRequest request) {
 		return employeeListService.getEmployeeListUsingScroll(request);
 	}
+	
+	@GetMapping("/employees/search.do")
+	public String search(HttpServletRequest request, Model model) {
+		employeeListService.getEmployeeListUsingSearch(request, model);
+		return "employees/search";
+	}
+	
+	
+	@ResponseBody	
+	@GetMapping(value="/employees/autoComplete.do", produces="application/json")
+	public Map<String, Object> autoComplete(HttpServletRequest request) {
+		return employeeListService.getAutoComplete(request);
+	}
+	
 	
 }
