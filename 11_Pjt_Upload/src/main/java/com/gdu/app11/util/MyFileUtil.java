@@ -30,7 +30,7 @@ public class MyFileUtil {
 		// 원래 첨부 파일의 확장자 꺼내기
 		String extName = null;
 		
-		// 확장자에 마침표(.)가 포함된 예외 상황 처리
+		// 확장자에 마침표(.)가 포함된 예외 상황 처리	endsWith : 뭐뭐로 끝난다라는 코드
 		if(originName.endsWith("tar.gz")) {
 			extName = "tar.gz";
 		} else {
@@ -48,4 +48,30 @@ public class MyFileUtil {
 		
 	}
 
+	
+	// String tempPath 만들기
+	public String getTempPath() {
+		return "/storage" + sep + "temp";
+	}
+	
+	// String tempfileName 만들기 (zip 파일)
+	public String getTempfileName() {
+		return UUID.randomUUID().toString().replace("-", "") + ".zip";
+	}
+	
+	// String yesterdayPath 만들기
+	public String getYesterdayPath() {
+		LocalDate date = LocalDate.now();
+		date.minusDays(1);	// 1일 전
+		return "/storage" + sep +  date.getYear() + sep + String.format("%02d", date.getMonthValue()) + sep + String.format("%02d", date.getDayOfMonth());
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
