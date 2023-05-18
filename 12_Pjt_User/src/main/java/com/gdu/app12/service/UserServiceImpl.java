@@ -6,9 +6,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.gdu.app12.domain.LeaveUserDTO;
 import com.gdu.app12.domain.UserDTO;
 import com.gdu.app12.mapper.UserMapper;
 import com.gdu.app12.util.JavaMailUtil;
@@ -69,7 +72,7 @@ public class UserServiceImpl implements UserService {
 		String email = request.getParameter("email");
 		String mobile = request.getParameter("mobile");
 		String birthyear = request.getParameter("birthyear");
-		String birthmonth = request.getParameter("birthyear");
+		String birthmonth = request.getParameter("birthmonth");
 		String birthdate = request.getParameter("birthdate");
 		String postcode = request.getParameter("postcode");
 		String roadAddress = request.getParameter("roadAddress");
@@ -145,18 +148,140 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		
-		
 	}
 	
 	
 	
+	@Override
+	public void login(HttpServletRequest request, HttpServletResponse response) {
+		
+		// 요청 파라미터
+		String url = request.getParameter("url");	// 로그인 화면의 이전 주소(로그인 후 되돌아갈 주소)
+		String id = request.getParameter("id");	
+		String pw = request.getParameter("pw");	
+		
+		// 비밀번호 SHA-256 암호화
+		pw = securityUtil.getSha256(pw);
+		
+		// UserDTO 만들기
+		UserDTO userDTO = new UserDTO();
+		userDTO.setId(id);
+		userDTO.setPw(pw);
+		
+		// DB에서 UserDTO 조회하기
+		UserDTO loginUserDTO = userMapper.selectUserByUserDTO(userDTO);
+		
+		// ID, PW가 일치하는 회원이 있으면 로그인 성공
+		// 1. session에 ID 저장하기
+		// 2. 회원 접속 기록 남기기
+		// 3. 이전 페이지로 이동하기
+		if(loginUserDTO != null) {
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("loginId", id);
+			
+			int updateResult = userMapper.updateUserAccess(id);
+			if(updateResult == 0) {
+				userMapper.insertUserAccess(id);
+			}
+			
+			try {
+				response.sendRedirect(url);				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		} else {
+			// ID, PW가 일치하는 회원이 없으면 로그인 실패
+			
+			// 응답
+			try {
+				
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('일치하는 회원 정보가 없습니다.');");
+				out.println("location.href='" + request.getContextPath() + "/index.do';");
+				out.println("</script>");
+				out.flush();
+				out.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
 	
 	
+	@Override
+	public void logout(HttpServletRequest request, HttpServletResponse response) {
+		
+		// session에 저장된 모든 정보를 지운다.(invalidate() 사용)
+		HttpSession session = request.getSession();
+		if(session.getAttribute("loginId") != null) {
+			session.invalidate();
+		}
+		
+	}
 	
+	@Transactional(readOnly=true)
+	@Override
+	public void leave(HttpServletRequest request, HttpServletResponse response) {
+		
+		// 탈퇴할 회원의 ID는 session에 loginId 속성으로 저장되어 있다.
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("loginId");
+		
+		// 탈퇴할 회원의 정보(ID, EMAIL, JOINED_AT) 가져오기
+		UserDTO userDTO = userMapper.selectUserById(id);
+		
+		// LeaveUserDTO 만들기
+		LeaveUserDTO leaveUserDTO = new LeaveUserDTO();
+		leaveUserDTO.setId(id);
+		leaveUserDTO.setEmail(userDTO.getEmail());
+		leaveUserDTO.setJoinedAt(userDTO.getJoinedAt());
+		
+		// 회원 탈퇴하기
+		int insertResult = userMapper.insertLeaveUser(leaveUserDTO);
+		int delectResult = userMapper.deleteUser(id);
+		
+		
+		// 응답
+		try {
+			
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			if(insertResult == 1 && delectResult == 1) {
+				
+				// session 초기화 작업
+				session.invalidate();
+				
+				out.println("alert('회원 탈퇴되었습니다.');");
+				out.println("location.href='" + request.getContextPath() + "/index.do';");
+			}else {
+				out.println("alert('회원 탈퇴에 실패했습니다.');");
+				out.println("history.back;");	
+			}
+			out.println("</script>");
+			out.flush();
+			out.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
-	
-	
-	
+	@Transactional(readOnly=true)
+	@Override
+	public void sleepUserHandle() {
+		int insertResult = userMapper.insertSleepUser();
+		if(insertResult > 0) {
+			userMapper.deleteUserForSleep();
+		}
+		
+	}
 	
 	
 	

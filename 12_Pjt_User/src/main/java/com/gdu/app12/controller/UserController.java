@@ -4,17 +4,20 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gdu.app12.service.UserService;
+
 
 @RequestMapping("/user")
 @Controller
@@ -67,12 +70,53 @@ public class UserController {
 	}
 	
 	
+	@GetMapping("/login.form")
+	public String loginForm(@RequestHeader("referer") String url, Model model) {
+		
+		// 요청 헤더 referer : 로그인 화면으로 이동하기 직전의 주소를 저장하는 헤더 값
+		model.addAttribute("url", url);
+		
+		return "user/login";
+		
+	}
 	
 	
+	@PostMapping("/login.do")
+	public void login(HttpServletRequest request, HttpServletResponse response) {
+		userService.login(request, response);
+	}
 	
 	
+	@GetMapping("/logout.do") // 로그아웃
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		// 로그인이 되어 있는지 확인
+		userService.logout(request, response);
+		return "redirect:/";
+	}
 	
 	
+	@GetMapping("/leave.do") // 회원탈퇴
+	public void leave(HttpServletRequest request, HttpServletResponse response) {
+		// 로그인이 되어 있는지 확인
+		userService.leave(request, response);
+	}
+	
+	
+	@GetMapping("/wakeup.form")
+	public String wakeup() {
+		return "user/wakeup";
+	}
+	
+	
+	@GetMapping("/restore.do")
+	public void restore(HttpSession session) {
+		// 복원할 회원의 아이디를 sysout으로 출력해 보시오.
+		System.out.println(session.getAttribute("sleepUserId"));
+		
+		
+	}
 	
 
+	
+	
 }
