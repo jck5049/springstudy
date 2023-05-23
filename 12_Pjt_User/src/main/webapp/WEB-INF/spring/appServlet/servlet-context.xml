@@ -44,6 +44,11 @@
 			<beans:bean class="com.gdu.app12.intercept.SleepUserCheckInterceptor" />
 		</interceptor>
 		
+		<interceptor>
+			<mapping path="/**" /> <!-- /** : 모든 경로 -->
+			<beans:bean class="com.gdu.app12.intercept.AutologinInterceptor"></beans:bean>
+		</interceptor>
+		
 	</interceptors>
 	
 	
