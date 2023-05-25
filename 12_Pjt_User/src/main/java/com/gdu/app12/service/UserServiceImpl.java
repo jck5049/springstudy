@@ -415,11 +415,14 @@ public class UserServiceImpl implements UserService {
 	  }
 	  
 	  
-	  /*
-	   * @Override public Map<String, Object> findUser(UserDTO userDTO) { Map<String,
-	   * Object> map = new HashMap<String, Object>(); map.put("findUser",
-	   * userMapper.selectUserByEmail(userDTO.getEmail())); return map; }
-	   */
+	  
+	    @Override 
+	    public Map<String, Object> findUser(UserDTO userDTO) {
+		    Map<String, Object> map = new HashMap<String, Object>();
+		    map.put("findUser", userMapper.selectUserByEmail(userDTO.getEmail()));
+		    return map; 
+	    }
+	   
 	
 	
 	

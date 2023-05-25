@@ -35,6 +35,7 @@
 			</div>
 			<div>
 				<a href="${contextPath}/user/logout.do">로그아웃</a>
+				<a href="${contextPath}/user/checkPw.form">마이페이지</a>
 				<a href="javascript:fnLeave()">회원탈퇴</a>
 			</div>
 		</c:if>

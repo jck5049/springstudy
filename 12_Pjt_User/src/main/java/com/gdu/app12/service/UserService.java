@@ -21,5 +21,5 @@ public interface UserService {
 	public void restore(HttpServletRequest request, HttpServletResponse response);
     public boolean checkPw(String id, String pw);
     public UserDTO getUserById(String id);
-  //public Map<String, Object> findUser(UserDTO userDTO);
+    public Map<String, Object> findUser(UserDTO userDTO);
 }
